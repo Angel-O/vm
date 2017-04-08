@@ -18,3 +18,7 @@ project/plugins/project/
 
 #eclipse
 .project
+.cache-main
+.cache-tests
+.classpath
+.settings/
