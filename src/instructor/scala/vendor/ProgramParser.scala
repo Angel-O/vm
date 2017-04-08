@@ -1,6 +1,7 @@
 package vendor
 
 import scala.collection.mutable.ListBuffer
+import scala.util.matching.Regex
 
 /**
   * A program parser parses a file or string containing a sequence
@@ -60,18 +61,21 @@ trait ProgramParser {
     */
   def parseString(string: String): InstructionList = {
 
-    var name: String = ""
-    var args: Option[String] = None
     var instructions = ListBuffer[Instruction]()
+    val nameNumPattern = "([a-zA-Z]) ([0-9]).".r // space is represented by an actual space
+    val namePattern = "[a-zA-Z]".r
 
     string.split("/n").foreach({
-      line => {
 
-        val name = line.split(" ")(0)
-        val args:Option[String] = Option(line.split(" ")(1))
-        val ss = Vector(args.get.toInt)
-        val ins = new Instruction(name, ss)
-        instructions += ins
+      line => line.r match{
+        case nameNumPattern(name, number) => {
+          instructions += new Instruction(name, Vector(number.toInt))
+        }
+        case namePattern(name) => {
+          instructions += new Instruction(name, Vector[Int]()) // will it be empty or contain a zero
+        }
+        case _ => throw new InvalidInstructionFormatException("Invalid instruction format")
+
       }
     })
 
