@@ -1,5 +1,7 @@
 package vendor
 
+import scala.collection.mutable.ListBuffer
+
 /**
   * A program parser parses a file or string containing a sequence
   * of bytecode programs in textual format. The program parser
@@ -56,5 +58,23 @@ trait ProgramParser {
     * @param string the string to parse
     * @return an instruction list
     */
-  def parseString(string: String): InstructionList
+  def parseString(string: String): InstructionList = {
+
+    var name: String = ""
+    var args: Option[String] = None
+    var instructions = ListBuffer[Instruction]()
+
+    string.split("/n").foreach({
+      line => {
+
+        val name = line.split(" ")(0)
+        val args:Option[String] = Option(line.split(" ")(1))
+        val ss = Vector(args.get.toInt)
+        val ins = new Instruction(name, ss)
+        instructions += ins
+      }
+    })
+
+    instructions.toVector
+  }
 }
