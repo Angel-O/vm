@@ -1,12 +1,12 @@
 package factory
 
-import scala.collection.mutable.ListBuffer
 import scala.reflect.io.File
 import vendor._
 
+// TODO would this be better as a singleton??
 class Parser extends ProgramParser {
 
-  // TODO: should we make these private?
+  // TODO: should we make these private? or move them to another (nested) singleton object?
   val namePattern = "([a-zA-Z]+)".r
   val nameNumPattern = s"$namePattern ([0-9]+)".r
 
@@ -19,11 +19,13 @@ class Parser extends ProgramParser {
   * Helper method to parse a collection of strings into an InstructionList
   *
   * @param instructions collection of strings representing the intructions to be parsed
-  * @return a collection of Instruction instances or throws an error
-  * @throws InvalidInstructionFormatException
+  * @return an InstructionList, that is a Vector of Instruction instances
+  * @throws InvalidInstructionFormatException if any string has an invalid format
   */
 private def doParsing(instructions: TraversableOnce[String]): InstructionList = {
 
+    // turning it into a vector as a 'for-comprehension' returns the
+    // same collection type that is being iterated
     for(toBeParsed <- instructions.toVector) yield {
 
       toBeParsed match {
