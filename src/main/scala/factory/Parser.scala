@@ -7,8 +7,9 @@ import vendor._
 class Parser extends ProgramParser {
 
   // TODO: should we make these private?
-  val nameNumPattern = "([a-zA-Z]+) ([0-9]+)".r // space is represented by an actual space in the regex
   val namePattern = "([a-zA-Z]+)".r
+  val nameNumPattern = s"$namePattern ([0-9]+)".r
+
 
   def parse(file: String): InstructionList = doParsing(File(file).lines)
 
