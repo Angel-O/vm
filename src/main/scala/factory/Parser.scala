@@ -10,7 +10,6 @@ class Parser extends ProgramParser {
   val namePattern = "([a-zA-Z]+)".r
   val nameNumPattern = s"$namePattern ([0-9]+)".r
 
-
   def parse(file: String): InstructionList = doParsing(File(file).lines)
 
   def parseString(string: String): InstructionList = doParsing(string.split('\n'))
@@ -30,7 +29,7 @@ private def doParsing(instructions: TraversableOnce[String]): InstructionList = 
       toBeParsed match {
         case namePattern(name) => new Instruction(name, Vector[Int]())
         case nameNumPattern(name, number) => new Instruction(name, Vector(number.toInt))
-        case _ => throw new InvalidInstructionFormatException(s"Invalid instruction format: ($toBeParsed)")
+        case _ => throw new InvalidInstructionFormatException(s"Unable to parse '$toBeParsed' instruction.")
       }
     }
   }
