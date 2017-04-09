@@ -4,6 +4,7 @@ import bc.{ByteCodeFactory, ByteCodeParser}
 import vendor.ProgramParser
 import vm.{VirtualMachine, VirtualMachineParser}
 
+
 /**
   * The `VirtualMachineFactory` follows the *factory pattern*. It provides
   * methods for each of the important parts in this assignment. You must
@@ -14,7 +15,7 @@ object VirtualMachineFactory {
   def byteCodeFactory: ByteCodeFactory = ???
 
   // TODO
-  def vendorParser: ProgramParser = ???
+  def vendorParser: ProgramParser = new Parser
 
   // TODO
   def byteCodeParser: ByteCodeParser = ???

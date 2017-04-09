@@ -1,7 +1,8 @@
-package vendor
+package factory
 
 import scala.collection.mutable.ListBuffer
 import scala.reflect.io.File
+import vendor._
 
 class Parser extends ProgramParser {
 
