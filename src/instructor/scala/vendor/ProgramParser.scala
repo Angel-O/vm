@@ -50,7 +50,7 @@ trait ProgramParser {
     * @param file the file to parse
     * @return an instruction list
     */
-  def parse(file: String): InstructionList = ???
+  def parse(file: String): InstructionList
 
   /**
     * Parses a string representation of a bytecode program
@@ -59,25 +59,5 @@ trait ProgramParser {
     * @param string the string to parse
     * @return an instruction list
     */
-  def parseString(string: String): InstructionList = {
-
-    var instructions = ListBuffer[Instruction]()
-    val nameNumPattern = "([a-zA-Z]+) ([0-9]+).".r // space is represented by an actual space
-    val namePattern = "([a-zA-Z]+)".r
-
-    string.split('\n').foreach({
-
-      line => line match{
-        case nameNumPattern(name, number) => {
-          instructions += new Instruction(name, Vector(number.toInt))
-        }
-        case namePattern(name) => {
-          instructions += new Instruction(name, Vector[Int]()) // will it be empty or contain a zero
-        }
-        case _ => throw new InvalidInstructionFormatException("Invalid instruction format")
-      }
-    })
-
-    instructions.toVector
-  }
+  def parseString(string: String): InstructionList
 }
