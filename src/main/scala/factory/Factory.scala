@@ -30,7 +30,7 @@ class Factory extends ByteCodeFactory with ByteCodeValues {
       case 10 => Bswap
       case 11 => Bdup
       case 12 => Bprint
-      case invalid => throw new InvalidBytecodeException(s"'$invalid' byte code is not invalid.")
+      case invalid => throw new InvalidBytecodeException(s"'$invalid' byte code is not valid.")
     }
   }
 }
