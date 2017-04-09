@@ -6,7 +6,7 @@ import scala.reflect.io.File
 class Parser extends ProgramParser {
 
   // TODO: should we make these private?
-  val nameNumPattern = "([a-zA-Z]+) ([0-9]+).".r // space is represented by an actual space in the regex
+  val nameNumPattern = "([a-zA-Z]+) ([0-9]+)".r // space is represented by an actual space in the regex
   val namePattern = "([a-zA-Z]+)".r
 
   def parse(file: String): Vector[Instruction] = {
@@ -33,7 +33,7 @@ class Parser extends ProgramParser {
 
     string match{
         case nameNumPattern(name, number) => new Instruction(name, Vector(number.toInt))
-        // TODO: establish if this will be empty or contain a zero?
+        // TODO: establish if this will be empty or contain a zero
         case namePattern(name) => new Instruction(name, Vector[Int]())
         case _ => throw new InvalidInstructionFormatException("Invalid instruction format")
     }
