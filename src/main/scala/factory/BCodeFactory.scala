@@ -1,11 +1,10 @@
 package factory
 
-import bc.ByteCodeFactory
-import bc.ByteCode
-import bc.ByteCodeValues
-import bc.InvalidBytecodeException
+import bc.{ByteCodeFactory => Factory, _}
 
-class Factory extends ByteCodeFactory with ByteCodeValues {
+class BCodeFactory extends Factory with ByteCodeValues {
+
+  // val validBytes = names collect(bytecode)
 
   def make(byte: Byte, args: Int*): ByteCode = {
 
@@ -17,19 +16,19 @@ class Factory extends ByteCodeFactory with ByteCodeValues {
                       throw new InvalidBytecodeException(
                           s"'${names(1)}' instruction can have at most one argument.")
                     else
-                      new Bconst(args(0))
+                      new Iconst(args(0))
         }
-      case 2 => Badd
-      case 3 => Bsub
-      case 4 => Bmul
-      case 5 => Bdiv
-      case 6 => Brem
-      case 7 => Bneg
-      case 8 => Binc
-      case 9 => Bdec
-      case 10 => Bswap
-      case 11 => Bdup
-      case 12 => Bprint
+      case 2 => Iadd
+      case 3 => Isub
+      case 4 => Imul
+      case 5 => Idiv
+      case 6 => Irem
+      case 7 => Ineg
+      case 8 => Iinc
+      case 9 => Idec
+      case 10 => Idup
+      case 11 => Iswap
+      case 12 => Iprint
       case invalid => throw new InvalidBytecodeException(s"'$invalid' byte code is not valid.")
     }
   }
