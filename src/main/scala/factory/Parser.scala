@@ -3,11 +3,10 @@ package factory
 import scala.reflect.io.File
 import vendor._
 
-// TODO would this be better as a singleton??
 class Parser extends ProgramParser {
 
   // TODO: should we make these private? or move them to another (nested) singleton object?
-  val namePattern = "([a-zA-Z]+)".r
+  val namePattern = "([^0-9]+)".r // accepting every non numeric character
   val nameNumPattern = s"$namePattern ([0-9]+)".r
 
   def parse(file: String): InstructionList = doParsing(File(file).lines)
