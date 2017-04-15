@@ -100,19 +100,19 @@ final case object Idup extends ByteCode {
 
   val name = names(9)
   val code: Byte = bytecode(name)
-  def execute(vm: VirtualMachine) = {
-    val first = vm.pop()
-    val second = first._2.pop()
-    val newVm = second._2.push(second._1)
-    newVm.push(first._1)
-    }
+  def execute(vm: VirtualMachine) = vm.push(vm.pop()._1)
 }
 
 final case object Iswap extends ByteCode {
 
   val name = names(10)
   val code: Byte = bytecode(name)
-  def execute(vm: VirtualMachine) = vm.push(vm.pop()._1)
+  def execute(vm: VirtualMachine) = {
+    val first = vm.pop()
+    val second = first._2.pop()
+    val newVm = second._2.push(first._1)
+    newVm.push(second._1)
+  }
 }
 
 final case object Iprint extends ByteCode {
