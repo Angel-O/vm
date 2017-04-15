@@ -1,35 +1,39 @@
 package factory
 
 import bc._
-import scala.collection.mutable.ListBuffer
 
 class BCodeParser extends ByteCodeParser {
 
   val factory = new BCodeFactory
 
-  // byte corresponding to the Iconst instruction: needs to be capital(see below)
+  // byte corresponding to the Iconst instruction: NOTE: needs to start with a capital as
+  // it is used below as a constant we are matching against, not as a 'match' variable.
   val Iconst = bytecode(names(0))
 
-  def parse(bytes: Vector[Byte]): Vector[ByteCode] = {
+  def parse(bytes: Vector[Byte]): Vector[ByteCode] = scanVectors(bytes, Vector[ByteCode]())._2
 
-      val ignored = ListBuffer[Int]()
+/**
+  * This recursive method will do the heavy work and parse a Vector of Bytes into a Vector
+  * of ByteCodes
+  *
+  * @param bytes Vector of Bytes to be parsed
+  * @param bytecodes empty Vector of ByteCodes that will be recursively replaced with a Vector
+  * 	containing the Bytecodes wanted
+  * @return a pair of Vectors, where the second element of the pair is a Vector of `ByteCode` instances
+  */
+def scanVectors(bytes: Vector[Byte], bytecodes: Vector[ByteCode]):(Vector[Byte], Vector[ByteCode]) = bytes match {
 
-      // The ignored list contains elements that have already been used in a previous iteration
-      // as an argument to build an Iconst instruction and therfore do not need to be scanned
-      for(i <- bytes.indices.toVector if( !ignored.contains(i) )) yield {
+    // if bytes contain at least two elements and the head is equal to Iconst we will
+    // "consume" the head and the first element of the tail and keep scanning the tail
+    // of the tail
+    case (Iconst +: ht +: tt) => scanVectors(tt, bytecodes :+ factory.make(Iconst, ht))
 
-        bytes(i) match{ // match against the current element
+    // if bytes has an empty tail (aka single element) OR it has at least two elements but the head
+    // is not equal to Iconst (this is the complemetary clause to the first match case) we will
+    // "consume" the head of the bytes Vector and keep scanning its tail
+    case (_ +: _) | (_ +: _ +: _) => scanVectors(bytes.tail, bytecodes :+ factory.make(bytes.head))
 
-          // if the current element is an Iconst create the correspondent command using
-          // the next element as a an argument. NOTE: the item we are matching against
-          // needs to start with a capital letter as it does not represent a 'match' variable
-          // , but a constant we are matching against. Add the next element to the ignored
-          // list as we are "consuming" it in this iteration.
-          case Iconst => ignored += i + 1;  factory.make(bytes(i), bytes(i + 1))
-
-          // otherwise create a bytecode command with the current element
-          case x => factory make x
-        }
-      }
+    // if bytes is empty we are done: return the pair of vectors
+    case _ => (bytes, bytecodes)
   }
 }
