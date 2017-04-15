@@ -7,9 +7,10 @@ class BCodeParser extends ByteCodeParser {
   val factory = new BCodeFactory
 
   // byte corresponding to the Iconst instruction: NOTE: needs to start with a capital as
-  // it is used below as a constant we are matching against, not as a 'match' variable.
+  // it is used below as a constant to "pattern-match" against, not as a 'match' variable.
   val Iconst = bytecode(names(0))
 
+  // returning the second element of the pair
   def parse(bytes: Vector[Byte]): Vector[ByteCode] = scanVectors(bytes, Vector[ByteCode]())._2
 
 /**
@@ -21,11 +22,11 @@ class BCodeParser extends ByteCodeParser {
   * 	containing the Bytecodes wanted
   * @return a pair of Vectors, where the second element of the pair is a Vector of `ByteCode` instances
   */
-def scanVectors(bytes: Vector[Byte], bytecodes: Vector[ByteCode]):(Vector[Byte], Vector[ByteCode]) = bytes match {
+def scanVectors(bytes: Vector[Byte], bytecodes: Vector[ByteCode]): (Vector[Byte], Vector[ByteCode]) = bytes match {
 
-    // if bytes contain at least two elements and the head is equal to Iconst we will
-    // "consume" the head and the first element of the tail and keep scanning the tail
-    // of the tail
+    // if bytes contains at least two elements and the head is equal to Iconst we will
+    // "consume" the head and the first element of the tail (ht) and keep scanning the tail
+    // of the tail (tt)
     case (Iconst +: ht +: tt) => scanVectors(tt, bytecodes :+ factory.make(Iconst, ht))
 
     // if bytes has an empty tail (aka single element) OR it has at least two elements but the head
