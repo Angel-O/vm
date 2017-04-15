@@ -16,10 +16,7 @@ class VMachine extends VirtualMachine {
     case head +: tail => executeOne(bc)._2 execute(tail)
 
     // if 'bc' is empty (aka there are no commands to execute) return
-    // the original Vector and the Virtual Machine as it is. Note this
-    // will only happen if we pass an empty Vector to this method: if
-    // we pass a non-empty stack the executeOne method will have already
-    // covered such scenario
+    // the original Virtual Machine as it is.
     case _ => this
   }
 
