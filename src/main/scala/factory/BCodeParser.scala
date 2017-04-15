@@ -23,7 +23,8 @@ class BCodeParser extends ByteCodeParser {
           // if the current element is an Iconst create the correspondent command using
           // the next element as a an argument. NOTE: the item we are matching against
           // needs to start with a capital letter as it does not represent a 'match' variable
-          // , but a constant we are matching against.
+          // , but a constant we are matching against. Add the next element to the ignored
+          // list as we are "consuming" it in this iteration.
           case Iconst => ignored += i + 1;  factory.make(bytes(i), bytes(i + 1))
 
           // otherwise create a bytecode command with the current element
