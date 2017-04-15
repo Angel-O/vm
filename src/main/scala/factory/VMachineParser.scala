@@ -41,7 +41,7 @@ private def doParsing(instructions: Vector[Instruction]) = {
     // or throw an exception if the value cannot be found; if an Int is found then it was an argument that we can safely turn into a byte
     val parsed = for (element <- flattenedInstructions) yield element match {
 
-      case s: String => bytecode.getOrElse(s, throw new InvalidBytecodeException(s"The '$s' bytecode does not match any instruction name"))
+      case s: String => bytecode.getOrElse(s, throw new InvalidBytecodeException(s"The '$s' instruction is not associated to any known bytecode"))
       case n: Int => n toByte
     }
 

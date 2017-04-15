@@ -12,8 +12,8 @@ class VMachine extends VirtualMachine {
 
   def execute(bc: Vector[ByteCode]): VirtualMachine = bc match {
 
-    // perform a recursive call
-    case head +: tail => head.execute(executeOne(tail)._2)
+    // performing a recursive call
+    case head +: tail => executeOne(bc)._2 execute(tail)
 
     // if 'bc' is empty (aka there are no commands to execute) return
     // the original Vector and the Virtual Machine as it is. Note this
