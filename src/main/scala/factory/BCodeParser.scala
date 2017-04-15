@@ -27,12 +27,12 @@ def scanVectors(bytes: Vector[Byte], bytecodes: Vector[ByteCode]): (Vector[Byte]
     // if bytes contains at least two elements and the head is equal to Iconst we will
     // "consume" the head and the first element of the tail (ht) and keep scanning the tail
     // of the tail (tt)
-    case (Iconst +: ht +: tt) => scanVectors(tt, bytecodes :+ factory.make(Iconst, ht))
+    case Iconst +: ht +: tt => scanVectors(tt, bytecodes :+ factory.make(Iconst, ht))
 
     // if bytes has an empty tail (aka single element) OR it has at least two elements but the head
     // is not equal to Iconst (this is the complemetary clause to the first match case) we will
     // "consume" the head of the bytes Vector and keep scanning its tail
-    case (_ +: _) | (_ +: _ +: _) => scanVectors(bytes.tail, bytecodes :+ factory.make(bytes.head))
+    case _+:_ | _+:_+:_ => scanVectors(bytes.tail, bytecodes :+ factory.make(bytes.head))
 
     // if bytes is empty we are done: return the pair of vectors
     case _ => (bytes, bytecodes)
