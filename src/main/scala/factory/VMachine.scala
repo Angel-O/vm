@@ -7,7 +7,7 @@ import vm.MachineUnderflowException
 
 class VMachine extends VirtualMachine {
 
-  // using a Vector as a stack
+  // using a ListBuffer as a stack
   val stack = ListBuffer[Int]()
 
   def execute(bc: Vector[ByteCode]): VirtualMachine = bc match {
@@ -41,7 +41,7 @@ class VMachine extends VirtualMachine {
   def push(value: Int): VirtualMachine = {
 
     // prepend the value to the stack (this will edit the original stack)
-    // adn return the virtual machine
+    // and return the virtual machine
     value +=: stack
     this
   }

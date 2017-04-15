@@ -11,18 +11,18 @@ class BCodeParser extends ByteCodeParser {
   val Iconst = bytecode(names(0))
 
   // returning the second element of the pair
-  def parse(bytes: Vector[Byte]): Vector[ByteCode] = scanVectors(bytes, Vector[ByteCode]())._2
+  def parse(bytes: Vector[Byte]): Vector[ByteCode] = scanVectors(bytes)._2
 
 /**
   * This recursive method will do the heavy work and parse a Vector of Bytes into a Vector
   * of ByteCodes
   *
   * @param bytes Vector of Bytes to be parsed
-  * @param bytecodes empty Vector of ByteCodes that will be recursively replaced with a Vector
-  * 	containing the Bytecodes wanted
+  * @param bytecodes optional Vector of ByteCodes that will be recursively replaced with a Vector
+  * 	containing the Bytecodes wanted: defaults to an empty vector
   * @return a pair of Vectors, where the second element of the pair is a Vector of `ByteCode` instances
   */
-def scanVectors(bytes: Vector[Byte], bytecodes: Vector[ByteCode]): (Vector[Byte], Vector[ByteCode]) = bytes match {
+def scanVectors(bytes: Vector[Byte], bytecodes: Vector[ByteCode] = Vector.empty): (Vector[Byte], Vector[ByteCode]) = bytes match {
 
     // if bytes contains at least two elements and the head is equal to Iconst we will
     // "consume" the head and the first element of the tail (ht) and keep scanning the tail
