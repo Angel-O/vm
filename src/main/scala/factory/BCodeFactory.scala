@@ -1,39 +1,28 @@
 package factory
 
-import bc.{ByteCodeFactory => Factory, _}
+import bc.{ByteCodeFactory => Factory, InvalidBytecodeException => IBE, _}
 
 class BCodeFactory extends Factory with ByteCodeValues {
 
-  // val validBytes = names collect(bytecode)
+  // maintain a Set of unary bytecodes, that is bytcodes that take no arguments
+  val unaryByteCodes = Vector(Iadd, Isub, Imul, Idiv, Irem, Ineg, Iinc, Idec, Idup, Iswap, Iprint) distinct
 
-  val inverse = for ((name, byte) <- bytecode) yield (byte, name)
+  // map each one of them to their code for greater flexibility: each bytecode
+  // has a unique byte by definition so inverting the mapping is safe
+  val byteToBytecode = ( for((byteCode, byte) <- unaryByteCodes.zip(unaryByteCodes.map( u => u.code))) yield (byte, byteCode) ) toMap
 
-  val unaryByteCodes = Set(Iadd, Isub, Imul, Idiv, Irem, Ineg, Iinc, Idec, Idup, Iswap, Iprint)
+  def make(byte: Byte, args: Int*): ByteCode = (byte, args size) match {
 
-  def make(byte: Byte, args: Int*): ByteCode = {
+    // valid binary bytecode
+    case (1, 1) => Iconst(args(0))
 
-    byte match {
-      case 1 => args match {
-          case Nil => throw new InvalidBytecodeException(
-                          s"'${names(0)}' instruction requires at least one argument.")
-          case _ => if(args.size > 2)
-                      throw new InvalidBytecodeException(
-                          s"'${names(0)}' instruction can have at most one argument.")
-                    else
-                      new Iconst(args(0))
-        }
-      case 2 => Iadd
-      case 3 => Isub
-      case 4 => Imul
-      case 5 => Idiv
-      case 6 => Irem
-      case 7 => Ineg
-      case 8 => Iinc
-      case 9 => Idec
-      case 10 => Idup
-      case 11 => Iswap
-      case 12 => Iprint
-      case invalid => throw new InvalidBytecodeException(s"'$invalid' byte code is not valid.")
-    }
+    // binary bytecode with too few or too many args
+    case (1, _) => throw new IBE(s"'${names(0)}' instruction requires at least and at most one argument.")
+
+    // valid unary bytecode, (if it's unknown an IBE will be thrown)
+    case (b, 0) => byteToBytecode.getOrElse(b, throw new IBE(s"'$b' byte code is not valid."))
+
+    // invalid (e.g: negative or out of range) unary bytecode (or valid but with too many args)
+    case _ => throw new IBE("invalid instruction.")
   }
 }

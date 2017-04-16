@@ -1,7 +1,7 @@
 package factory
 
 import vm.VirtualMachineParser
-import bc._
+import bc.{InvalidBytecodeException => IBE, _}
 import vendor.Instruction
 
 class VMachineParser extends VirtualMachineParser with ByteCodeValues{
@@ -32,21 +32,20 @@ private def doParsing(instructions: Vector[Instruction]) = {
     val flattenedInstructions = instructions.map(i => (i.name, i.args)).flatMap(
 
         pair => pair match {
-          case (x, head +: tail) => Vector(x, head) // deconstruct the second element of the pair into head and tail
+          case (x, head +: _) => Vector(x, head) // deconstruct the second element of the pair into head and tail
           case (x, _) => Vector(x) // the second element of the pair holds an empty vector
-          }
+        }
     )
 
     // parse the flattened list to get a Byte vector: if a String is found get the correspondent byte from the bytecode map
     // or throw an exception if the value cannot be found; if an Int is found then it was an argument that we can safely turn into a byte
-    val parsed = for (element <- flattenedInstructions) yield element match {
+    val instructionsToByte = for (element <- flattenedInstructions) yield element match {
 
-      case s: String => bytecode.getOrElse(s, throw new InvalidBytecodeException(s"The '$s' instruction is not associated to any known bytecode"))
+      case s: String => bytecode.getOrElse(s, throw new IBE(s"The '$s' instruction is not associated to any known bytecode"))
       case n: Int => n toByte
     }
 
     // parse the Byte vector
-    byteCodeParser.parse(parsed)
+    byteCodeParser.parse(instructionsToByte)
   }
-
 }

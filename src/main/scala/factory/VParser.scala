@@ -28,7 +28,7 @@ private def doParsing(instructions: TraversableOnce[String]): InstructionList = 
     for(toBeParsed <- instructions.toVector) yield {
 
       toBeParsed match {
-        case namePattern(name) => new Instruction(name, Vector[Int]())
+        case namePattern(name) => new Instruction(name, Vector.empty)
         case nameNumPattern(name, number) => new Instruction(name, Vector(number.toInt))
         case _ => throw new InvalidInstructionFormatException(s"Unable to parse '$toBeParsed' instruction.")
       }
