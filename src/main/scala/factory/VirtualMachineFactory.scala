@@ -17,11 +17,11 @@ object VirtualMachineFactory {
   // TODO
   def vendorParser: ProgramParser = new VParser
 
-  // TODO
-  def byteCodeParser: ByteCodeParser = new BCodeParser
+  // injecting the bytecode factory
+  def byteCodeParser: ByteCodeParser = new BCodeParser(byteCodeFactory)
 
-  // TODO
-  def virtualMachineParser: VirtualMachineParser = new VMachineParser
+  // injecting the vendor parser and the bytecode oarser into the adapter
+  def virtualMachineParser: VirtualMachineParser = new VMachineParser(vendorParser, byteCodeParser)
 
   // TODO
   def virtualMachine: VirtualMachine = VMachine()

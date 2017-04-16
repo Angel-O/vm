@@ -3,22 +3,20 @@ package factory
 import vm.VirtualMachineParser
 import bc.{InvalidBytecodeException => IBE, _}
 import vendor.Instruction
+import vendor.ProgramParser
 
-class VMachineParser extends VirtualMachineParser with ByteCodeValues{
-
-  val vendorParser = VirtualMachineFactory.vendorParser
-  val byteCodeParser = VirtualMachineFactory.byteCodeParser
+class VMachineParser(val vendorParser:ProgramParser, val byteCodeParser:ByteCodeParser) extends VirtualMachineParser with ByteCodeValues{
 
   def parse(file: String): Vector[ByteCode] = doParsing(vendorParser.parse(file))
 
   def parseString(str: String): Vector[ByteCode] = doParsing(vendorParser.parseString(str))
 
 /**
-  * Helper method to parse a collection of Instructions into an Vector of ByteCode.
-  * It will deconstruct each instruction and create a list containing all members
-  * of every instruction and the parse the the list of instruction to get a list of
-  * Byte, finally it will delegate the task of creating a vector of ByteCode to
-  * the `ByteCodeParser`.
+  * Helper method to parse a collection of `Instruction` into an Vector of `ByteCode`.
+  * It will deconstruct each instruction and create a list containing all members of
+  * each instruction and then parse the resulting list of "deconstructed" instructions
+  * to get a Byte list. Finally it will delegate the task of creating a ByteCode
+  * vector to the `ByteCodeParser`.
   *
   * @param instructions Vector of `Instruction` instances
   * @return a Vector of `ByteCode`

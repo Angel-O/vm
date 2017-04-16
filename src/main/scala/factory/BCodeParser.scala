@@ -2,9 +2,7 @@ package factory
 
 import bc._
 
-class BCodeParser extends ByteCodeParser {
-
-  val factory = new BCodeFactory
+class BCodeParser(val factory: ByteCodeFactory) extends ByteCodeParser {
 
   // byte corresponding to the Iconst instruction: NOTE: needs to start with a capital as
   // it is used below as a constant to "pattern-match" against, not as a 'match' variable.

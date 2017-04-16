@@ -6,7 +6,7 @@ import vendor._
 class VParser extends ProgramParser {
 
   // TODO: should we make these private? or move them to another (nested) singleton object?
-  val namePattern = "([^0-9]+)".r // accepting every non numeric character
+  val namePattern = "([^0-9]+)".r // accepting any non-numeric character
   val nameNumPattern = s"$namePattern ([0-9]+)".r
 
   def parse(file: String): InstructionList = doParsing(File(file).lines)
