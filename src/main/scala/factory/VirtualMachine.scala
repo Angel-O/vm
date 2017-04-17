@@ -1,11 +1,11 @@
 package factory
 
-import vm.{MachineUnderflowException => MUE, _}
+import vm.{MachineUnderflowException => MUE, VirtualMachine => VM}
 import bc.ByteCode
 
-case class VMachine(private val stack: Vector[Int] = Vector empty) extends VirtualMachine {
+case class VirtualMachine(stack: Vector[Int] = Vector empty) extends VM {
 
-  def execute(bc: Vector[ByteCode]): VirtualMachine = bc match {
+  def execute(bc: Vector[ByteCode]): VM = bc match {
 
     // performing a recursive call: Note here "execute" is the virtual
     // machine method
@@ -16,7 +16,7 @@ case class VMachine(private val stack: Vector[Int] = Vector empty) extends Virtu
     case _ => this
   }
 
-  def executeOne(bc: Vector[ByteCode]): (Vector[ByteCode], VirtualMachine) = bc match {
+  def executeOne(bc: Vector[ByteCode]): (Vector[ByteCode], VM) = bc match {
 
     // execute the first command and return a pair with the remaining ones
     // and the result of the command execution: Note here "execute" is the
@@ -30,10 +30,10 @@ case class VMachine(private val stack: Vector[Int] = Vector empty) extends Virtu
 
   // if the stack is empty throw an MUE, otherwise return the head of the stack
   // and a new virtual machine having a stack equal to the tail of the current stack
-  def pop(): (Int, VirtualMachine) = if (stack isEmpty) throw new MUE("Cannot pop from empty stack.") else (stack head, VMachine(stack tail))
+  def pop(): (Int, VM) = if (stack isEmpty) throw new MUE("Cannot pop from empty stack.") else (stack head, VirtualMachine(stack tail))
 
   // return a virtual machine having a stack obtained by prepending the value to the current stack
-  def push(value: Int): VirtualMachine = VMachine(value +: stack)
+  def push(value: Int): VM = VirtualMachine(value +: stack)
 
   def state: Vector[Int] = stack
 }

@@ -1,11 +1,10 @@
 package factory
 
-import vm.VirtualMachineParser
-import bc.{InvalidBytecodeException => IBE, _}
-import vendor.Instruction
-import vendor.ProgramParser
+import vm.{VirtualMachineParser => VMP}
+import bc.{InvalidBytecodeException => IBE, ByteCodeParser => BCP, _}
+import vendor.{Instruction, ProgramParser}
 
-class VMachineParser(val vendorParser:ProgramParser, val byteCodeParser:ByteCodeParser) extends VirtualMachineParser with ByteCodeValues{
+class VirtualMachineParser(vendorParser: ProgramParser, byteCodeParser: BCP) extends VMP with ByteCodeValues{
 
   def parse(file: String): Vector[ByteCode] = doParsing(vendorParser.parse(file))
 

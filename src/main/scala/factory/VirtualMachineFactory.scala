@@ -1,8 +1,8 @@
 package factory
 
-import bc.{ByteCodeFactory, ByteCodeParser}
+import bc.{ByteCodeFactory => BCF, ByteCodeParser => BCP}
 import vendor.ProgramParser
-import vm.{VirtualMachine, VirtualMachineParser}
+import vm.{VirtualMachine => VM, VirtualMachineParser => VMP}
 
 
 /**
@@ -12,17 +12,17 @@ import vm.{VirtualMachine, VirtualMachineParser}
   */
 object VirtualMachineFactory {
   // TODO
-  def byteCodeFactory: ByteCodeFactory = new BCodeFactory
+  def byteCodeFactory: BCF = new ByteCodeFactory
 
   // TODO
-  def vendorParser: ProgramParser = new VParser
+  def vendorParser: ProgramParser = new VendorParser
 
   // injecting the bytecode factory
-  def byteCodeParser: ByteCodeParser = new BCodeParser(byteCodeFactory)
+  def byteCodeParser: BCP = new ByteCodeParser(byteCodeFactory)
 
-  // injecting the vendor parser and the bytecode oarser into the adapter
-  def virtualMachineParser: VirtualMachineParser = new VMachineParser(vendorParser, byteCodeParser)
+  // injecting the vendor parser and the bytecode parser into the adapter
+  def virtualMachineParser: VMP = new VirtualMachineParser(vendorParser, byteCodeParser)
 
   // TODO
-  def virtualMachine: VirtualMachine = VMachine()
+  def virtualMachine: VM = VirtualMachine()
 }

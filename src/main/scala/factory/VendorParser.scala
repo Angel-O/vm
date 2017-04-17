@@ -3,7 +3,7 @@ package factory
 import scala.reflect.io.File
 import vendor._
 
-class VParser extends ProgramParser {
+class VendorParser extends ProgramParser {
 
   // TODO: should we make these private? or move them to another (nested) singleton object?
   val namePattern = "([^0-9]+)".r // accepting any non-numeric character
@@ -12,7 +12,6 @@ class VParser extends ProgramParser {
   def parse(file: String): InstructionList = doParsing(File(file).lines)
 
   def parseString(string: String): InstructionList = doParsing(string.split('\n'))
-
 
 /**
   * Helper method to parse a collection of strings into an InstructionList

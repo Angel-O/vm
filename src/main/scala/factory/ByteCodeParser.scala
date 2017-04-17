@@ -1,8 +1,8 @@
 package factory
 
-import bc._
+import bc.{ByteCodeParser => BCP, ByteCodeFactory => BCF, _}
 
-class BCodeParser(val factory: ByteCodeFactory) extends ByteCodeParser {
+class ByteCodeParser(factory: BCF) extends BCP {
 
   // byte corresponding to the Iconst instruction: NOTE: needs to start with a capital as
   // it is used below as a constant to "pattern-match" against, not as a 'match' variable.
