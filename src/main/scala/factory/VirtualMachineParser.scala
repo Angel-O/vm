@@ -12,7 +12,7 @@ class VirtualMachineParser(vendorParser: ProgramParser, byteCodeParser: BCP) ext
 
 /**
   * Helper method to parse a collection of `Instruction` into an Vector of `ByteCode`.
-  * It will deconstruct each instruction and create a list containing all members of
+  * It will map each instruction to a list containing all members of
   * each instruction and then parse the resulting list of "deconstructed" instructions
   * to get a Byte list. Finally it will delegate the task of creating a ByteCode
   * vector to the `ByteCodeParser`.
@@ -24,22 +24,16 @@ class VirtualMachineParser(vendorParser: ProgramParser, byteCodeParser: BCP) ext
   */
 private def doParsing(instructions: Vector[Instruction]) = {
 
-    // map-map-flatten: map each instruction to a pair of (name: String, args: Vector[Int]) and then map the sequence of pairs
-    // to a list of vectors of string and integers, finally flatten the list of vectors to a list strings and integers
-    val flattenedInstructions = instructions.map(i => (i.name, i.args)).flatMap(
+    // map each instruction to their string representation, then split the string using a space as separator
+    // to get an array representing name as first element and args as second (if it's there). Finally flatten
+    // the resulting collection of string arrays to get a vector of strings
+    val flattenedInstructions = instructions.flatMap(_.toString.split(' '))
 
-        pair => pair match {
-          case (x, head +: _) => Vector(x, head) // deconstruct the second element of the pair into head and tail
-          case (x, _) => Vector(x) // the second element of the pair holds an empty vector
-        }
-    )
-
-    // parse the flattened list to get a Byte vector: if a String is found get the corresponding byte from the bytecode map
-    // or throw an exception if the value cannot be found; if an Int is found then it was an argument that we can safely turn into a byte
-    val instructionsToByte = for (element <- flattenedInstructions) yield element match {
-
-      case s: String => bytecode.getOrElse(s, throw new IBE(s"The '$s' instruction is not associated to any known bytecode"))
-      case n: Int => n toByte
+    // try mapping each string to the corresponding bytecode (if any). If that fails check if it's a numeric string
+    // and if so, convert it to a byte, otherwise throw an exception.
+    val instructionsToByte = for (member <- flattenedInstructions) yield bytecode.get(member) match {
+      case option: Some[Byte] => option.get
+      case None => if (member forall(_ isDigit)) member toByte else throw new IBE(s"Unknown instruction: '$member'.")
     }
 
     // parse the Byte vector
