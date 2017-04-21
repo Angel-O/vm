@@ -101,8 +101,8 @@ final case object Idup extends ByteCode {
   val name = names(9)
   val code: Byte = bytecode(name)
   def execute(vm: VM) = {
-    val elem = vm.pop()._1
-    vm.push(elem).push(elem)
+    val elem = vm.pop()
+    elem._2.push(elem._1).push(elem._1)
   }
 }
 
