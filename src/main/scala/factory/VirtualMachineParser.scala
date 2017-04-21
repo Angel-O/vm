@@ -12,10 +12,9 @@ class VirtualMachineParser(vendorParser: ProgramParser, byteCodeParser: BCP) ext
 
 /**
   * Helper method to parse a collection of `Instruction` into an Vector of `ByteCode`.
-  * It will map each instruction to a list containing all members of
-  * each instruction and then parse the resulting list of "deconstructed" instructions
-  * to get a Byte list. Finally it will delegate the task of creating a ByteCode
-  * vector to the `ByteCodeParser`.
+  * It will map each instruction to their string representation and then parse the
+  * resulting list of "deconstructed" instructions to get a Byte list.
+  * Finally it will delegate the task of creating a ByteCode vector to the `ByteCodeParser`.
   *
   * @param instructions Vector of `Instruction` instances
   * @return a Vector of `ByteCode`
