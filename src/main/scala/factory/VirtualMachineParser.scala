@@ -31,7 +31,7 @@ private def doParsing(instructions: Vector[Instruction]) = {
     // try mapping each string to the corresponding bytecode (if any). If that fails check if it's a numeric string
     // and if so, convert it to a byte, otherwise throw an exception.
     val instructionsToByte = for (member <- flattenedInstructions) yield bytecode.get(member) match {
-      case option: Some[Byte] => option.get
+      case validOption: Some[Byte] => validOption.get
       case None => if (member forall(_ isDigit)) member toByte else throw new IBE(s"Unknown instruction: '$member'.")
     }
 
