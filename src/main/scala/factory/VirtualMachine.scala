@@ -30,7 +30,7 @@ case class VirtualMachine(stack: Vector[Int] = Vector empty) extends VM {
 
   // if the stack is empty throw an MUE, otherwise return the head of the stack
   // and a new virtual machine having a stack equal to the tail of the current stack
-  def pop(): (Int, VM) = if (stack isEmpty) throw new MUE("Cannot pop from empty stack.") else (stack head, VirtualMachine(stack tail))
+  def pop(): (Int, VM) = (stack.headOption.getOrElse(throw new MUE("Cannot pop from empty stack.")), VirtualMachine(stack tail))
 
   // return a virtual machine having a stack obtained by prepending the value to the current stack
   def push(value: Int): VM = VirtualMachine(value +: stack)

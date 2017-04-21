@@ -34,7 +34,7 @@ private def doParsing(instructions: Vector[Instruction]) = {
         }
     )
 
-    // parse the flattened list to get a Byte vector: if a String is found get the correspondent byte from the bytecode map
+    // parse the flattened list to get a Byte vector: if a String is found get the corresponding byte from the bytecode map
     // or throw an exception if the value cannot be found; if an Int is found then it was an argument that we can safely turn into a byte
     val instructionsToByte = for (element <- flattenedInstructions) yield element match {
 
