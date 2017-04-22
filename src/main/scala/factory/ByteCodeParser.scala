@@ -20,7 +20,7 @@ class ByteCodeParser(factory: BCF) extends BCP {
   * 	containing the Bytecodes wanted: defaults to an empty vector
   * @return a pair of Vectors, where the second element of the pair is a Vector of `ByteCode` instances
   */
-def createBytecodes(bytes: Vector[Byte], bytecodes: Vector[ByteCode] = Vector.empty): (Vector[Byte], Vector[ByteCode]) = bytes match {
+  private def createBytecodes(bytes: Vector[Byte], bytecodes: Vector[ByteCode] = Vector.empty): (Vector[Byte], Vector[ByteCode]) = bytes match {
 
     // if bytes contains at least two elements and the head is equal to Iconst we will
     // "consume" the head and the first element of the tail (ht) and keep scanning the tail
