@@ -51,8 +51,14 @@ final case object Idiv extends ByteCode {
   def execute(vm: VM) = {
     val first = vm.pop()
     val second = first._2.pop()
-    second._2.push(first._1 / second._1)
+
+    if(second._1 != 0){
+      second._2.push(first._1 / second._1)
     }
+    else{
+      throw new IllegalArgumentException("Division by zero")
+    }
+  }
 }
 
 final case object Irem extends ByteCode {
