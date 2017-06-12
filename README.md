@@ -1,2 +1,2 @@
 # vm
-virtual machine
+virtual machine implementation in Scala
